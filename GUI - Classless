@@ -1,0 +1,41 @@
+#DISCLAIMER: I RIPPED THIS OFF FROM THE INTERNET AND MADE SOME CHANGES
+#SO SORRY IF SHIT IS WIERD AND I CANT EXPLAIN ANYTHING
+from tkinter import *
+def frameSwap(frame):
+    frame.tkraise()
+
+root = Tk()
+
+f1 = Frame(root)
+f2 = Frame(root)
+f3 = Frame(root)
+f4 = Frame(root)
+for frame in (f1, f2, f3, f4):
+    frame.grid(row=0, column=0, sticky='news')
+    
+Label(f1, text='this is in frame 1').pack()    
+Button(f1, text='frame 1', command=lambda:frameSwap(f1)).pack()
+Button(f1, text='frame 2', command=lambda:frameSwap(f2)).pack()
+Button(f1, text='frame 3', command=lambda:frameSwap(f3)).pack()
+Button(f1, text='frame 4', command=lambda:frameSwap(f4)).pack()
+
+Label(f2, text='this is in frame two').pack()
+Button(f2, text='frame 1', command=lambda:frameSwap(f1)).pack()
+Button(f2, text='frame 2', command=lambda:frameSwap(f2)).pack()
+Button(f2, text='frame 3', command=lambda:frameSwap(f3)).pack()
+Button(f2, text='frame 4', command=lambda:frameSwap(f4)).pack()
+
+Label(f3, text='this is in frame 3').pack()
+Button(f3, text='frame 1', command=lambda:frameSwap(f1)).pack()
+Button(f3, text='frame 2', command=lambda:frameSwap(f2)).pack()
+Button(f3, text='frame 3', command=lambda:frameSwap(f3)).pack()
+Button(f3, text='frame 4', command=lambda:frameSwap(f4)).pack()
+
+Label(f4, text='fourth frame').pack()
+Button(f4, text='frame 1', command=lambda:frameSwap(f1)).pack()
+Button(f4, text='frame 2', command=lambda:frameSwap(f2)).pack()
+Button(f4, text='frame 3', command=lambda:frameSwap(f3)).pack()
+Button(f4, text='frame 4', command=lambda:frameSwap(f4)).pack()
+
+frameSwap(f1)
+root.mainloop()
