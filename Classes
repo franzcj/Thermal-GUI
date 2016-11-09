@@ -1,107 +1,105 @@
-#Pulled straight from stackoverflow, will need mofication but provides framework
+from tkinter import *
+class _Frame:
+    def __init__(self, root):
+        self.root = root;
+        self.frame = Frame(root)
+        self.frame.grid(row=0, column=0, sticky='news')
+        self.CheckUVar = IntVar()
+        self.CheckMaterial = IntVar()
+        self.CheckThickness = StringVar()
+        self.CheckDensity = StringVar()
+        self.CheckConductivity = StringVar()
+        self.CheckSpecHeat = StringVar()
 
-import tkinter as tk
+    def frameSwap(self, _frame): # swaps between frames
+        _frame.frame.tkraise()
 
-class BaseFrame(tk.Frame):
-    """An abstract base class for the frames that sit inside PythonGUI.
+    def addSwapButtons(self): # adds buttons to swap between frames
+        MainButton = Button(self.frame, text = 'Main', command=lambda:self.frameSwap(f1), anchor= N).grid(row = 1, column = 0)
+        CompButton = Button(self.frame, text = 'Components', command=lambda:self.frameSwap(f2), anchor = N).grid(row = 1, column = 1)
+        SurfButton = Button(self.frame, text = 'Surface', command=lambda:self.frameSwap(f3), anchor = N).grid(row = 1, column = 2)
+        OrbitButton = Button(self.frame, text = 'Orbit', command=lambda:self.frameSwap(f4), anchor = N).grid(row = 1, column = 3)
+        if self.frame == f1: # So this does literally nothing
+            MainButton = Button(self.frame, text = 'Main', bg = 'red', command=lambda:self.frameSwap(f1), anchor= N).grid(row = 1, column = 0)
+        elif self.frame == f2: # The if statement is never true
+            CompButton = Button(self.frame, text = 'Components', bg = 'red', command=lambda:self.frameSwap(f2), anchor= N).grid(row = 1, column = 0)
+        elif self.frame == f3:
+            SurfButton = Button(self.frame, text = 'Surface', bg = 'red', command=lambda:self.frameSwap(f3), anchor= N).grid(row = 1, column = 0)
+        elif self.frame == f4:
+            OrbitButton = Button(self.frame, text = 'Orbit', bg = 'red', command=lambda:self.frameSwap(f4), anchor= N).grid(row = 1, column = 0)
+        
+    def sizeClassWidgets(self):
+        Label(self.frame, text = 'Size Class:').grid(row = 2, column = 0, columnspan = 1)
+        Radiobutton(self.frame, text = '1U', variable = self.CheckUVar, value=1).grid(row = 3, column = 0)
+        Radiobutton(self.frame, text = '2U', variable = self.CheckUVar, value=2).grid(row = 4, column = 0)
+        Radiobutton(self.frame, text = '3U', variable = self.CheckUVar, value=3).grid(row = 5, column = 0)
 
-    Args:
-      master (tk.Frame): The parent widget.
-      controller (PythonGUI): The controlling Tk object.
+    def thicknessEntry(self):
+        ThicknessInputLabel = Label(self.frame, text='Construction: Wall Thickness').grid(row = 2, column = 2)
+        Thickness = Entry(self.frame, textvariable = self.CheckThickness).grid(row = 2, column = 3)
 
-    Attributes:
-      controller (PythonGUI): The controlling Tk object.
+    def selectMaterial(self):
+        Label(self.frame, text = 'Construction Material:').grid(row = 3, column = 2)
+        Radiobutton(self.frame, text = 'Default A', variable = self.CheckMaterial, value=1).grid(row = 4, column = 2)
+        Radiobutton(self.frame, text = 'Default B', variable = self.CheckMaterial, value=2).grid(row = 5, column = 2)
+        Radiobutton(self.frame, text = 'Default C', variable = self.CheckMaterial, value=3).grid(row = 6, column = 2)
 
-    """
+    def customActive(self):
+        Density = Entry(self.frame, textvariable = self.CheckDensity, state=NORMAL).grid(row = 4, column = 4)
+        Conductivity = Entry(self.frame, textvariable = self.CheckConductivity, state=NORMAL).grid(row = 5, column = 4)
+        SpecificHeat = Entry(self.frame, textvariable = self.CheckSpecHeat, state=NORMAL).grid(row = 6, column = 4)
+        
+    def customMaterial(self):
+        Radiobutton(self.frame, text = 'Custom', variable = self.CheckMaterial, value=4, command = self.customActive).grid(row = 7, column = 2)
+        
+        DensityLabel = Label(self.frame, text='Density:').grid(row = 4, column = 3)
+        Density = Entry(self.frame, textvariable = self.CheckDensity, state=DISABLED).grid(row = 4, column = 4)
 
-    def __init__(self, master, controller):
-        tk.Frame.__init__(self, master)
-        self.controller = controller
-        self.grid()
-        self.create_widgets()
+        ConductivityLabel = Label(self.frame, text='Conductivity: ').grid(row = 5, column = 3)
+        Conductivity = Entry(self.frame, textvariable = self.CheckConductivity, state=DISABLED).grid(row = 5, column = 4)
 
-    def create_widgets(self):
-        """Create the widgets for the frame."""
-        raise NotImplementedError
+        SpecHeatLabel = Label(self.frame, text='Specific Heat:').grid(row = 6, column = 3)
+        SpecificHeat = Entry(self.frame, textvariable = self.CheckSpecHeat, state=DISABLED).grid(row = 6, column = 4)
 
-class ExecuteFrame(BaseFrame):
-    """The application home page.
+    def unitCell(self):
+        for i in range(0, self.CheckUVar.get()):
+            LabelFrame(self, text = str(i+1) + 'U').grid(row = 0, column = 3*i, columnspan = 3)
+            
+    
+    def __str__(self):
+        if self == f1:
+            return 'Main'
+        elif self == f2:
+            return 'Components'
+        elif self == f3:
+            return 'Surface'
+        elif self == f4:
+            return 'Orbit'
+        
+      
+root = Tk()
 
-    Attributes:
-      new_button (tk.Button): The button to switch to HomeFrame.
+f1 = _Frame(root)
+f2 = _Frame(root)
+f3 = _Frame(root)
+f4 = _Frame(root)
 
-    """
+for thingamabob in [f1, f2, f3, f4]: #Implements addSwapButtons for each frame
+    thingamabob.addSwapButtons()
 
-    def create_widgets(self):
-        """Create the base widgets for the frame."""
-        self.new_button = tk.Button(self,
-                                    anchor=tk.W,
-                                    command=lambda: self.controller.show_frame(HomeFrame),
-                                    padx=5,
-                                    pady=5,
-                                    text="Home")
-        self.new_button.grid(padx=5, pady=5, sticky=tk.W+tk.E)
+f1.sizeClassWidgets()
+f1.thicknessEntry()
+f1.selectMaterial()
+f1.customMaterial()
 
+f2.unitCell()
 
-class HomeFrame(BaseFrame):
-    """The application home page.
+#labels added for debugging purposes, not final
+Label(f1.frame, text = f1).grid(row = 0, column = 1, columnspan = 2)
+Label(f2.frame, text = f2).grid(row = 0, column = 1, columnspan = 2)
+Label(f3.frame, text = f3).grid(row = 0, column = 1, columnspan = 2)
+Label(f4.frame, text = f4).grid(row = 0, column = 1, columnspan = 2)
 
-    Attributes:
-      new_button (tk.Button): The button to switch to ExecuteFrame.
-
-    """
-
-    def create_widgets(self):
-        """Create the base widgets for the frame."""
-        self.new_button = tk.Button(self,
-                                    anchor=tk.W,
-                                    command=lambda: self.controller.show_frame(ExecuteFrame),
-                                    padx=5,
-                                    pady=5,
-                                    text="Execute")
-        self.new_button.grid(padx=5, pady=5, sticky=tk.W+tk.E)
-
-
-class PythonGUI(tk.Tk):
-    """The main window of the GUI.
-
-    Attributes:
-      container (tk.Frame): The frame container for the sub-frames.
-      frames (dict of tk.Frame): The available sub-frames.
-
-    """
-
-    def __init__(self):
-        tk.Tk.__init__(self)
-        self.title("Python GUI")
-        self.create_widgets()
-        self.resizable(0, 0)
-
-    def create_widgets(self):
-        """Create the widgets for the frame."""             
-        #   Frame Container
-        self.container = tk.Frame(self)
-        self.container.grid(row=0, column=0, sticky=tk.W+tk.E)
-
-        #   Frames
-        self.frames = {}
-        for f in (HomeFrame, ExecuteFrame): # defined subclasses of BaseFrame
-            frame = f(self.container, self)
-            frame.grid(row=2, column=2, sticky=tk.NW+tk.SE)
-            self.frames[f] = frame
-        self.show_frame(HomeFrame)
-
-    def show_frame(self, cls):
-        """Show the specified frame.
-
-        Args:
-          cls (tk.Frame): The class of the frame to show. 
-
-        """
-        self.frames[cls].tkraise()
-
-if __name__ == "__main__":
-    app = PythonGUI()
-    app.mainloop()
-    exit()
+f4.frameSwap(f1)
+f1.root.mainloop()
 
